@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic-settings
+sqlalchemy
+psycopg2-binary
+python-dotenv
+python-multipart
+pytest-cov>=4.1.0
+ruff>=0.4   
