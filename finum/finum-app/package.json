@@ -1,0 +1,49 @@
+{
+  "name": "finum-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "db:seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seeds/seed-ethical-corpus.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.0",
+    "@auth/prisma-adapter": "^2.11.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^12.29.2",
+    "lucide-react": "^0.563.0",
+    "next": "16.1.6",
+    "next-auth": "^5.0.0-beta.30",
+    "node-cache": "^5.1.2",
+    "openai": "^4.75.0",
+    "papaparse": "^5.5.3",
+    "pgvector": "^0.2.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-markdown": "^9.0.1",
+    "recharts": "^3.7.0",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@prisma/client": "^5.22.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/papaparse": "^5.5.2",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "dotenv-cli": "^11.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "prisma": "^5.22.0",
+    "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5"
+  }
+}

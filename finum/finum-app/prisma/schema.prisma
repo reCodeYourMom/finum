@@ -1,0 +1,282 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Auth models (NextAuth v5)
+model User {
+  id                 String    @id @default(cuid())
+  email              String    @unique
+  name               String?
+  image              String?
+  emailVerified      DateTime?
+  onboardingComplete Boolean   @default(false)
+  onboardingStep     Int       @default(0)
+  accounts           Account[]
+  sessions           Session[]
+  budgets            Budget[]
+  transactions       Transaction[]
+  buckets            Bucket[]
+  patterns           Pattern[]
+  decisions          Decision[]
+  conversations      Conversation[]
+  auditLogs          AuditLog[]
+  feedback           UserFeedback[]
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  @@unique([identifier, token])
+}
+
+// Finum Business Models
+
+model Budget {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  amount      Decimal  @db.Decimal(12, 2)
+  currency    String   @default("EUR")
+  period      String   // "monthly" | "annual" | "goal"
+  category    String?
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  buckets     Bucket[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@index([userId])
+}
+
+model Transaction {
+  id              String                @id @default(cuid())
+  userId          String
+  date            DateTime
+  amount          Decimal               @db.Decimal(12, 2)
+  currency        String
+  amountEur       Decimal?              @db.Decimal(12, 2)
+  merchant        String
+  merchantNorm    String?               // Normalized merchant name
+  description     String?
+  category        String?
+  bucketId        String?
+  isRecurring     Boolean               @default(false)
+  patternId       String?
+  importSource    String?               // "csv" | "pdf"
+  importFile      String?
+  user            User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bucket          Bucket?               @relation(fields: [bucketId], references: [id])
+  pattern         Pattern?              @relation(fields: [patternId], references: [id])
+  embedding       TransactionEmbedding?
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  @@index([userId, date])
+  @@index([bucketId])
+  @@index([patternId])
+}
+
+model Bucket {
+  id           String        @id @default(cuid())
+  userId       String
+  budgetId     String?
+  name         String
+  allocated    Decimal       @db.Decimal(12, 2)
+  spent        Decimal       @db.Decimal(12, 2) @default(0)
+  period       String        // "monthly" | "annual"
+  category     String?
+  color        String?
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  budget       Budget?       @relation(fields: [budgetId], references: [id])
+  transactions Transaction[]
+  rules        Rule[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  @@index([userId])
+}
+
+model Rule {
+  id          String   @id @default(cuid())
+  bucketId    String
+  type        String   // "merchant" | "category" | "amount_range"
+  condition   Json     // { merchant?: string, category?: string, min?: number, max?: number }
+  priority    Int      @default(0)
+  bucket      Bucket   @relation(fields: [bucketId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@index([bucketId])
+}
+
+model Pattern {
+  id              String        @id @default(cuid())
+  userId          String
+  merchantNorm    String
+  frequency       String        // "weekly" | "monthly" | "quarterly"
+  avgAmount       Decimal       @db.Decimal(12, 2)
+  projectedAnnual Decimal       @db.Decimal(12, 2)
+  status          String        @default("detected") // "detected" | "budgeted" | "ignored"
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions    Transaction[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  @@index([userId])
+}
+
+model Decision {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String   // "override" | "friction_bypass" | "pattern_action"
+  context     Json     // { transactionId?, patternId?, bucketId?, reason? }
+  justification String?
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  @@index([userId, createdAt])
+}
+
+// AI/RAG Models
+
+model EthicalDocument {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   @db.Text
+  category    String   // "ethical_guideline" | "financial_best_practice" | "regulatory"
+  source      String?
+  embedding   Unsupported("vector(1536)")?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+}
+
+model Conversation {
+  id          String    @id @default(cuid())
+  userId      String
+  title       String?
+  status      String    @default("active") // "active" | "archived"
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages    Message[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId, status])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  role           String       // "user" | "assistant" | "system"
+  content        String       @db.Text
+  metadata       Json?        // tokens, cached, ragSources, etc.
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+model AICache {
+  id             String   @id @default(cuid())
+  cacheKey       String   @unique
+  response       String   @db.Text
+  contextHash    String
+  metadata       Json?
+  expiresAt      DateTime
+  createdAt      DateTime @default(now())
+
+  @@index([expiresAt])
+  @@index([contextHash])
+}
+
+model TransactionEmbedding {
+  id            String      @id @default(cuid())
+  transactionId String      @unique
+  embedding     Unsupported("vector(1536)")
+  semanticTags  String[]
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+}
+
+// Monitoring & Audit
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String
+  action      String   // "budget.create", "transaction.import", "bucket.update", etc.
+  entityType  String?  // "Budget", "Transaction", "Bucket", etc.
+  entityId    String?
+  changes     Json?    // Before/after for updates
+  metadata    Json?    // Additional context (IP, user agent, etc.)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([action])
+  @@index([entityType, entityId])
+}
+
+model ErrorLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  errorType   String   // "client", "server", "api", "service"
+  errorCode   String?
+  message     String   @db.Text
+  stack       String?  @db.Text
+  context     Json?
+  resolved    Boolean  @default(false)
+  resolvedAt  DateTime?
+  createdAt   DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([errorType, resolved])
+  @@index([createdAt])
+}
+
+model UserFeedback {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String   // "bug", "feature", "general", "praise"
+  title       String
+  description String   @db.Text
+  screenshot  String?  // URL to screenshot if provided
+  page        String?  // Current page when feedback submitted
+  metadata    Json?    // Browser, device, etc.
+  status      String   @default("new") // "new", "reviewed", "in_progress", "resolved", "closed"
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([status])
+  @@index([type])
+}

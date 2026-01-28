@@ -1,0 +1,176 @@
+[
+  {
+    "title": "Principe de Transparence",
+    "content": "Le coach financier Finum doit toujours expliquer son raisonnement de manière claire. Chaque recommandation doit être accompagnée d'une justification basée sur les données financières de l'utilisateur. Par exemple : 'Selon tes dépenses de janvier, tu as dépensé 450€ en restaurants, ce qui représente 22% de ton budget mensuel.' Ne jamais donner de conseil sans contexte ni explication.",
+    "category": "ethical_guideline",
+    "source": "Finum Ethics Framework v1.0"
+  },
+  {
+    "title": "Principe d'Autonomie",
+    "content": "L'utilisateur doit toujours conserver le contrôle de ses décisions financières. Le coach propose des options et des suggestions, mais ne force jamais une action particulière. Utiliser un langage qui préserve le choix : 'Tu pourrais envisager...', 'Une option serait de...', 'Il serait intéressant de...'. Éviter les impératifs comme 'Tu dois' sauf pour les alertes de sécurité.",
+    "category": "ethical_guideline",
+    "source": "Finum Ethics Framework v1.0"
+  },
+  {
+    "title": "Protection de la Vie Privée",
+    "content": "Ne jamais demander d'informations sensibles telles que : mots de passe, codes PIN, numéros de carte bancaire complets, numéros de sécurité sociale, ou identifiants bancaires. Si l'utilisateur mentionne ces informations, rappeler qu'elles ne doivent jamais être partagées. Les données financières fournies par l'application (transactions, budgets) sont suffisantes pour offrir des conseils pertinents.",
+    "category": "ethical_guideline",
+    "source": "RGPD/GDPR Compliance"
+  },
+  {
+    "title": "Prévention des Dommages Financiers",
+    "content": "Éviter tout conseil qui pourrait mettre l'utilisateur en situation financière risquée. Ne JAMAIS suggérer : d'emprunter pour investir, de contracter un crédit pour rembourser un autre crédit sans analyse approfondie, d'investir dans des actifs à haut risque sans avertissement clair, ou de négliger le fonds d'urgence (3-6 mois de dépenses). En cas de situation complexe, orienter vers un conseiller financier professionnel.",
+    "category": "ethical_guideline",
+    "source": "Finum Safety Guidelines"
+  },
+  {
+    "title": "Bienveillance et Non-Jugement",
+    "content": "Adopter un ton encourageant et positif, même face à des dépassements budgétaires importants. Ne jamais utiliser de langage culpabilisant ou critique. Remplacer 'Tu as mal géré ton budget' par 'Il semble que certaines catégories aient dépassé le budget ce mois-ci, voyons comment ajuster'. Célébrer les progrès, même petits : 'Bravo ! Tu as réduit tes dépenses en restaurants de 15% ce mois-ci.'",
+    "category": "ethical_guideline",
+    "source": "Finum Tone Guidelines"
+  },
+  {
+    "title": "Crédit à la Consommation en France",
+    "content": "Le crédit à la consommation en France est encadré par le Code de la consommation. Les points clés : le TAEG (Taux Annuel Effectif Global) doit être clairement affiché, l'emprunteur dispose d'un délai de rétractation de 14 jours, et le taux d'usure est révisé trimestriellement par la Banque de France. Éviter de recommander un crédit à la consommation comme première solution. Privilégier l'ajustement du budget ou l'épargne préventive.",
+    "category": "regulatory",
+    "source": "Code de la consommation français"
+  },
+  {
+    "title": "Obligations des Intermédiaires Financiers",
+    "content": "Selon la réglementation française, tout conseil financier personnalisé doit être adapté à la situation du client (revenus, objectifs, tolérance au risque). Finum n'est pas un conseiller en investissement agréé (CIF), donc se limiter aux conseils budgétaires et d'épargne de base. Pour les questions d'investissement complexes (assurance-vie, PEA, actions), orienter vers un professionnel certifié.",
+    "category": "regulatory",
+    "source": "AMF (Autorité des Marchés Financiers)"
+  },
+  {
+    "title": "Protection des Données Personnelles",
+    "content": "Le RGPD impose que les données personnelles soient collectées pour des finalités déterminées, explicites et légitimes. Les utilisateurs doivent pouvoir accéder, modifier et supprimer leurs données. Ne jamais utiliser les données financières d'un utilisateur à d'autres fins que l'aide à la gestion budgétaire. Les données ne doivent pas être partagées avec des tiers sans consentement explicite.",
+    "category": "regulatory",
+    "source": "RGPD Article 5"
+  },
+  {
+    "title": "Fonds d'Urgence",
+    "content": "Un fonds d'urgence doit représenter 3 à 6 mois de dépenses essentielles (loyer, alimentation, transport, assurances). C'est la première priorité avant tout objectif d'épargne ou d'investissement. Recommandations : pour un célibataire, viser 3 mois minimum ; pour une famille avec enfants, viser 6 mois ; pour un freelance ou entrepreneur, viser 9-12 mois. Placer ce fonds sur un compte épargne accessible (Livret A, LDDS).",
+    "category": "financial_best_practice",
+    "source": "Personal Finance Best Practices"
+  },
+  {
+    "title": "Méthodes de Remboursement de Dettes",
+    "content": "Deux méthodes principales : 1) **Avalanche** : rembourser d'abord les dettes avec les taux d'intérêt les plus élevés (optimisation mathématique). 2) **Snowball** : rembourser d'abord les plus petites dettes (motivation psychologique). En France, prioriser : crédits renouvelables (taux élevés) > prêts conso > crédit immobilier. Toujours payer au moins le minimum sur toutes les dettes pour éviter les pénalités.",
+    "category": "financial_best_practice",
+    "source": "Debt Management Strategies"
+  },
+  {
+    "title": "Règle du 50/30/20",
+    "content": "Répartition budgétaire recommandée : 50% pour les besoins essentiels (loyer, courses, transport, assurances), 30% pour les envies (loisirs, restaurants, shopping), 20% pour l'épargne et le remboursement de dettes. Cette règle est un point de départ, à adapter selon la situation : un loyer élevé peut nécessiter 60/20/20, ou un objectif d'épargne important peut justifier 50/20/30. L'important est la cohérence et l'équilibre.",
+    "category": "financial_best_practice",
+    "source": "Senator Elizabeth Warren - All Your Worth"
+  },
+  {
+    "title": "Épargne Automatique",
+    "content": "L'épargne automatique ('pay yourself first') consiste à virer une somme fixe vers un compte épargne dès réception du salaire. Avantages : réduction de la tentation de dépenser, constitution régulière d'un capital, meilleure discipline financière. Recommandation : commencer par 5-10% du revenu net, puis augmenter progressivement. Utiliser les virements permanents pour automatiser.",
+    "category": "financial_best_practice",
+    "source": "Behavioral Finance Insights"
+  },
+  {
+    "title": "Biais Comportementaux en Finance",
+    "content": "Principaux biais à connaître : 1) **Comptabilité mentale** : traiter l'argent différemment selon sa source (bonus vs salaire). 2) **Aversion à la perte** : la douleur d'une perte est plus forte que le plaisir d'un gain équivalent. 3) **Ancrage** : se fier trop fortement à la première information reçue. 4) **Présent privilégié** : préférer une gratification immédiate à un bénéfice futur plus grand. Sensibiliser l'utilisateur à ces biais aide à prendre de meilleures décisions.",
+    "category": "financial_best_practice",
+    "source": "Behavioral Economics (Kahneman & Tversky)"
+  },
+  {
+    "title": "Inflation et Pouvoir d'Achat",
+    "content": "L'inflation en France (2023-2024) tourne autour de 4-5% annuellement. Conséquences sur le budget : augmentation du coût de l'alimentation, de l'énergie, des transports. Conseils : réviser régulièrement le budget pour refléter les nouveaux prix, comparer les fournisseurs (énergie, assurances), privilégier les achats en gros pour l'alimentaire, envisager les marques distributeurs. L'épargne sur un Livret A (3%) perd du pouvoir d'achat si l'inflation dépasse le taux.",
+    "category": "financial_best_practice",
+    "source": "INSEE & Banque de France"
+  },
+  {
+    "title": "Quand Recommander un Ajustement de Budget",
+    "content": "Recommander un ajustement si : 1) Dépassement récurrent (3 mois consécutifs) sur une même catégorie. 2) Événement de vie majeur (naissance, déménagement, changement d'emploi). 3) Variation de revenus supérieure à 15%. 4) Objectif d'épargne non atteint pendant 6 mois. Approche : ne pas réduire brutalement, proposer des ajustements graduels (10-15% max par catégorie). Identifier les catégories compressibles vs incompressibles.",
+    "category": "contextual_guideline",
+    "source": "Finum Coaching Framework"
+  },
+  {
+    "title": "Gestion des Dépassements Récurrents",
+    "content": "Si un utilisateur dépasse systématiquement un bucket : 1) **Analyser** : les dépenses sont-elles justifiées et incompressibles ? 2) **Ajuster** : augmenter le budget de ce bucket en réduisant un autre moins prioritaire. 3) **Optimiser** : suggérer des alternatives moins coûteuses (ex : passer d'Uber à vélo/transport en commun). 4) **Suivre** : vérifier l'amélioration sur 2-3 mois. Ne pas blâmer, mais accompagner vers une solution réaliste.",
+    "category": "contextual_guideline",
+    "source": "Finum Coaching Framework"
+  },
+  {
+    "title": "Quand Suggérer un Conseil Professionnel",
+    "content": "Orienter vers un conseiller financier certifié si : 1) Endettement important (ratio dette/revenu > 40%). 2) Projet d'investissement significatif (achat immobilier, création entreprise). 3) Situation familiale complexe (divorce, héritage, succession). 4) Demande de conseil sur des produits financiers complexes (assurance-vie, PEA, SCPI). 5) Signes de détresse financière ou surendettement. Finum offre un accompagnement budgétaire, pas une gestion patrimoniale.",
+    "category": "contextual_guideline",
+    "source": "Finum Scope of Service"
+  },
+  {
+    "title": "Red Flags : Dépenses Problématiques",
+    "content": "Signaux d'alerte nécessitant attention particulière : 1) **Jeux d'argent** : transactions répétées vers sites de paris/casinos. 2) **Crédits renouvelables multiples** : signe de spiral e d'endettement. 3) **Achats impulsifs récurrents** : >20% du budget en achats non planifiés. 4) **Découverts fréquents** : plus de 2-3 fois par trimestre. 5) **Prêts entre particuliers** : emprunts via apps ou proches. En cas de red flag, aborder avec sensibilité et suggérer ressources d'aide (association de consommateurs, médiateur bancaire).",
+    "category": "contextual_guideline",
+    "source": "Financial Wellness Indicators"
+  },
+  {
+    "title": "Optimisation Courses et Alimentation",
+    "content": "Les courses représentent souvent 15-25% du budget. Conseils d'optimisation : 1) Planifier les menus hebdomadaires. 2) Faire une liste et s'y tenir (réduction achats impulsifs). 3) Privilégier marques distributeurs (économie 30-40%). 4) Acheter en vrac produits non périssables. 5) Utiliser applications anti-gaspi (TooGoodToGo, Phenix). 6) Comparer prix entre enseignes (Drive permet comparaison facile). Économie potentielle : 50-100€/mois pour un foyer moyen.",
+    "category": "financial_best_practice",
+    "source": "French Consumer Insights"
+  },
+  {
+    "title": "Abonnements et Dépenses Récurrentes",
+    "content": "Les abonnements oubliés grèvent le budget. Audit recommandé tous les 6 mois : streaming vidéo (Netflix, Prime, Disney+), musique (Spotify, Deezer), presse (journaux, magazines), apps mobiles (stockage, fitness, méditation), box mensuelles. Questions à poser : l'utilises-tu réellement ? Peux-tu le partager (compte famille) ? Existe-t-il une alternative gratuite ? En moyenne, un ménage français a 8-12 abonnements pour 80-150€/mois. Potentiel d'économie : 30-50€/mois en éliminant l'inutile.",
+    "category": "financial_best_practice",
+    "source": "French Spending Patterns 2024"
+  },
+  {
+    "title": "Transport : Optimisation Coûts",
+    "content": "Le transport représente 10-20% du budget français moyen. Options selon situation : 1) **Voiture** : covoiturage (BlaBlaCar), entretien préventif, comparateur assurance annuel, essence (apps comparateurs), envisager passage à l'hybride/électrique si km élevés. 2) **Transport en commun** : forfaits Navigo, Liberté+, vélo/trottinette pour courtes distances. 3) **Vélo** : investissement initial (400-800€), puis coût quasi nul, bénéfice santé. 4) **Télétravail** : négocier 1-2 jours/semaine = économie trajet.",
+    "category": "financial_best_practice",
+    "source": "French Mobility Trends"
+  },
+  {
+    "title": "Énergie : Réduction Factures",
+    "content": "L'énergie (électricité, gaz) pèse lourd (100-200€/mois). Conseils : 1) Comparer fournisseurs annuellement (comparateurs : Selectra, Hello Watt). 2) Adopter heures creuses si applicable (lave-linge, lave-vaisselle la nuit). 3) Baisser chauffage de 1°C = 7% d'économie. 4) Isolation simple : joints fenêtres, rideaux thermiques. 5) Électroménager classe A+++. 6) Éteindre veilles (multiprises à interrupteur). 7) LED pour ampoules. Économie potentielle : 20-40€/mois.",
+    "category": "financial_best_practice",
+    "source": "ADEME (Agence de l'Environnement)"
+  },
+  {
+    "title": "Loisirs et Sorties : Budget Équilibré",
+    "content": "Les loisirs sont essentiels pour le bien-être, mais doivent rester dans le budget. Stratégies : 1) **Enveloppe mensuelle** : montant fixe pour sorties (restaurants, cinéma, bars). 2) **Alternatives gratuites** : musées gratuits (1er dimanche du mois), parcs, randonnées, événements municipaux. 3) **Bons plans** : cartes fidélité cinéma (UGC, Pathé illimité), offres groupées (Groupon), happy hours. 4) **Home entertainment** : soirées jeux, cooking home plutôt que restaurants. Objectif : 10-15% du budget sans culpabilité.",
+    "category": "financial_best_practice",
+    "source": "Lifestyle Optimization"
+  },
+  {
+    "title": "Gestion des Imprévus Financiers",
+    "content": "Les imprévus (réparation voiture, électroménager cassé, frais médicaux) perturbent le budget. Stratégie : 1) **Fonds d'urgence** : priorité #1 (3-6 mois de dépenses). 2) **Catégorie 'Imprévus'** dans le budget : 5-10% du revenu. 3) **Assurances appropriées** : habitation, santé, auto (éviter sous-assurance). 4) **Entretien préventif** : moins cher que réparation urgente. 5) **Comparateurs** : trouver meilleur prix en cas de remplacement nécessaire. Mental : accepter que les imprévus sont normaux et prévisibles sur le long terme.",
+    "category": "financial_best_practice",
+    "source": "Financial Resilience Framework"
+  },
+  {
+    "title": "Objectifs d'Épargne : Méthode SMART",
+    "content": "Pour réussir l'épargne, définir des objectifs SMART : **S**pécifique (achat voiture 12 000€), **M**esurable (tracker progression mensuelle), **A**tteignable (cohérent avec revenus), **R**éaliste (pas 500€/mois avec 1500€ de revenu), **T**emporel (deadline : dans 18 mois). Exemples : 'Épargner 300€/mois pendant 12 mois pour voyage de 3600€' ou 'Constituer fonds d'urgence de 5000€ en 10 mois avec 500€/mois'. Visualisation : tracker progrès (Finum), photo objectif sur frigo.",
+    "category": "financial_best_practice",
+    "source": "Goal-Setting Psychology"
+  },
+  {
+    "title": "Mindful Spending : Achat Conscient",
+    "content": "Le mindful spending consiste à réfléchir avant d'acheter. Règle des 48h : attendre 2 jours avant achat >50€ (réduit achats impulsifs de 60%). Questions à se poser : 1) En ai-je vraiment besoin ? 2) Existe-t-il déjà dans mes affaires ? 3) Combien d'heures de travail représente-t-il ? 4) L'utiliserai-je dans 6 mois ? 5) Puis-je l'emprunter, le louer, ou l'acheter d'occasion ? Cette approche réduit les achats impulsifs et favorise des choix alignés avec les valeurs et priorités.",
+    "category": "financial_best_practice",
+    "source": "Behavioral Finance & Minimalism"
+  },
+  {
+    "title": "Communication Financière en Couple",
+    "content": "L'argent est source de conflits dans 40% des couples. Bonnes pratiques : 1) **Réunion budget mensuelle** : 30min pour réviser dépenses et ajuster. 2) **Transparence** : pas de dépenses cachées >50€. 3) **Comptes** : commun pour dépenses partagées, personnels pour liberté individuelle. 4) **Objectifs communs** : projet partagé (voyage, achat immobilier) renforce cohésion. 5) **Respect** : pas de jugement sur dépenses 'plaisir' de l'autre tant que dans budget. Finum peut aider à objectiver la discussion avec données factuelles.",
+    "category": "financial_best_practice",
+    "source": "Relationship Finance Studies"
+  },
+  {
+    "title": "Éducation Financière des Enfants",
+    "content": "Transmettre bonnes pratiques dès jeune âge : 1) **Tirelire** (3-6 ans) : concept épargne visuelle. 2) **Argent de poche** (7-12 ans) : montant régulier, apprendre gestion (ex : 5-10€/mois). 3) **Compte épargne** (12-15 ans) : ouvrir Livret Jeune, visualiser intérêts. 4) **Budget projet** (15-18 ans) : objectif (console, vélo) avec plan épargne. 5) **Transparence** : expliquer coût loyer, courses, factures selon âge. Éviter : utiliser argent comme punition/récompense unique, comparaisons entre fratrie.",
+    "category": "financial_best_practice",
+    "source": "Financial Literacy Education"
+  },
+  {
+    "title": "Gestion du Budget Étudiant",
+    "content": "Budget étudiant serré nécessite optimisation : 1) **Logement** : colocation (économie 30-40% vs studio), APL (demande immédiate), campus universitaire si dispo. 2) **Alimentation** : Crous (repas 3.30€), meal prep, éviter livraison/fast-food quotidien. 3) **Transport** : abonnements étudiants (50% réduction), vélo. 4) **Sorties** : tarifs étudiants (cinéma, musées), soirées associatives. 5) **Livres** : bibliothèque universitaire, occasion (Vinted, Leboncoin), numériques. 6) **Job étudiant** : 10-15h/sem max pour ne pas impacter études. Finum aide à suivre dépenses variables.",
+    "category": "financial_best_practice",
+    "source": "Student Financial Wellness"
+  }
+]

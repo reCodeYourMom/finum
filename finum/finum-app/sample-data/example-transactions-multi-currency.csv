@@ -1,0 +1,10 @@
+date,amount,merchant,currency,description,category
+2026-01-05,50.00,Amazon,USD,Livres en ligne,Loisirs
+2026-01-08,100.00,Apple Store,USD,Applications,Loisirs
+2026-01-10,75.00,Microsoft,USD,Abonnement Office,Professionnel
+2026-01-12,45.00,Booking.com,GBP,Réservation hôtel,Voyage
+2026-01-15,120.00,Airbnb,GBP,Location appartement,Voyage
+2026-01-18,80.00,Swisscom,CHF,Téléphone,Abonnements
+2026-01-20,150.00,Amazon.ca,CAD,Électronique,Shopping
+2026-01-22,5000,Uniqlo,JPY,Vêtements,Shopping
+2026-01-25,200.00,Hotel.com,USD,Hébergement,Voyage

@@ -1,0 +1,11 @@
+name,amount,currency,period,category
+Alimentation,500,EUR,monthly,Nourriture
+Loyer,1200,EUR,monthly,Logement
+Transport,150,EUR,monthly,Mobilité
+Loisirs,200,EUR,monthly,Divertissement
+Épargne,300,EUR,monthly,Économies
+Santé,100,EUR,monthly,Médical
+Shopping,150,EUR,monthly,Vêtements
+Restaurants,200,EUR,monthly,Sorties
+Vacances,2000,EUR,goal,Voyage
+Réserve Urgence,3000,EUR,goal,Sécurité
