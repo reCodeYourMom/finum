@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Microphone Permission -->
+    <key>NSMicrophoneUsageDescription</key>
+    <string>نحتاج إلى الوصول إلى الميكروفون لإجراء محادثة صوتية - We need microphone access for voice conversation</string>
+
+    <!-- Speech Recognition Permission -->
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>نحتاج إلى التعرف على الكلام للمحادثة بالعربية - We need speech recognition for Arabic conversation</string>
+
+    <!-- App Configuration -->
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+        <key>UIApplicationSupportsMultipleScenes</key>
+        <false/>
+    </dict>
+
+    <!-- Network Configuration -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <!-- Allow localhost connections for development -->
+        <key>NSAllowsLocalNetworking</key>
+        <true/>
+        <!-- For production, remove this and use HTTPS -->
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+        <!-- Explicitly allow 192.168.x.x network -->
+        <key>NSExceptionDomains</key>
+        <dict>
+            <key>192.168.1.166</key>
+            <dict>
+                <key>NSExceptionAllowsInsecureHTTPLoads</key>
+                <true/>
+                <key>NSIncludesSubdomains</key>
+                <true/>
+            </dict>
+        </dict>
+    </dict>
+
+    <!-- Supported Interface Orientations -->
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+
+    <!-- Status Bar Style -->
+    <key>UIStatusBarStyle</key>
+    <string>UIStatusBarStyleLightContent</string>
+
+    <!-- Launch Screen -->
+    <key>UILaunchScreen</key>
+    <dict/>
+</dict>
+</plist>
