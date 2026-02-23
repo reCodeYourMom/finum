@@ -30,6 +30,7 @@ def start_scheduler() -> None:
     from src.wellness.meal_planner import send_weekly_meal_plan
     from src.integrations.github import send_github_digest
     from src.integrations.stripe_client import send_weekly_revenue_report
+    from src.integrations.product_intelligence import send_weekly_product_report
 
     _scheduler = AsyncIOScheduler(timezone=PARIS_TZ)
 
@@ -190,6 +191,15 @@ def start_scheduler() -> None:
         replace_existing=True,
     )
 
+    # Intelligence produit hebdomadaire — lundi 8h30
+    _scheduler.add_job(
+        send_weekly_product_report,
+        trigger=CronTrigger(day_of_week="mon", hour=8, minute=30, timezone=PARIS_TZ),
+        id="weekly_product_report",
+        name="Intelligence produit lundi 8h30",
+        replace_existing=True,
+    )
+
     _scheduler.start()
     logger.info(
         "Scheduler démarré — "
@@ -206,7 +216,8 @@ def start_scheduler() -> None:
         "Plan repas dim 19h | "
         "Bilan hebdo dim 20h | "
         "GitHub 9h lun-ven | "
-        "Stripe lundi 8h05"
+        "Stripe lundi 8h05 | "
+        "Produit lundi 8h30"
     )
 
 

@@ -40,6 +40,11 @@ def setup_handlers() -> None:
         handle_location_message,
         handle_sport_plan_callback,
         handle_courses_callback,
+        # Mémoire apprenante
+        cmd_memoire,
+        # Sprint 4 — Intelligence produit
+        cmd_analyse,
+        handle_roadmap_callback,
         # Sprint 4 — GitHub + Stripe
         cmd_github,
         cmd_revenue,
@@ -74,6 +79,12 @@ def setup_handlers() -> None:
     application.add_handler(CommandHandler("repasplan", cmd_repasplan))
     application.add_handler(CommandHandler("fitness", cmd_fitness))
 
+    # ── Mémoire apprenante ────────────────────────────────────
+    application.add_handler(CommandHandler("memoire", cmd_memoire))
+
+    # ── Sprint 4 — Intelligence produit ──────────────────────
+    application.add_handler(CommandHandler("analyse", cmd_analyse))
+
     # ── Sprint 4 — GitHub + Stripe ────────────────────────────
     application.add_handler(CommandHandler("github", cmd_github))
     application.add_handler(CommandHandler("revenue", cmd_revenue))
@@ -86,6 +97,7 @@ def setup_handlers() -> None:
     application.add_handler(CallbackQueryHandler(handle_event_callback, pattern=r"^event_"))
     application.add_handler(CallbackQueryHandler(handle_sport_plan_callback, pattern=r"^sport_plan_"))
     application.add_handler(CallbackQueryHandler(handle_courses_callback, pattern=r"^courses_"))
+    application.add_handler(CallbackQueryHandler(handle_roadmap_callback, pattern=r"^roadmap_"))
 
     # ── Messages libres ───────────────────────────────────────
     application.add_handler(
@@ -98,4 +110,4 @@ def setup_handlers() -> None:
         MessageHandler(filters.VOICE | filters.AUDIO, handle_voice_message)
     )
 
-    logger.info("Handlers Telegram enregistrés (Sprint 1→5 + Sprint 3 réel)")
+    logger.info("Handlers Telegram enregistrés (Sprint 1→5 + Sprint 3 réel + Sprint 4 produit)")

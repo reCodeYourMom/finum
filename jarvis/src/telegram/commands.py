@@ -1,3 +1,4 @@
+import asyncio
 import io
 import logging
 import os
@@ -40,6 +41,8 @@ async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "/repasplan — Plan repas de la semaine\n"
         "/courses — Liste de courses\n"
         "/fitness — Trouver la salle Fitness Park la plus proche\n"
+        "/analyse [app] — Analyse conviction app(s) via Claude\n"
+        "/memoire — Ce que Jarvis a appris\n"
         "/github — Activité GitHub 24h\n"
         "/revenue — Dashboard Stripe\n"
         "/status — État du système\n"
@@ -230,9 +233,12 @@ async def handle_draft_callback(update: Update, context: ContextTypes.DEFAULT_TY
 
     from src.email.poller import send_approved_draft, cancel_draft
 
+    from src.memory.learning import record_decision
+
     if action == "draft_approve":
         try:
             await send_approved_draft(draft_id)
+            await record_decision("email_draft", str(draft_id), "approved")
             new_text = query.message.text + "\n\n✅ *Email envoyé.*"
             await query.edit_message_text(new_text, parse_mode="Markdown")
             logger.info(f"Draft {draft_id} approuvé et envoyé")
@@ -246,6 +252,7 @@ async def handle_draft_callback(update: Update, context: ContextTypes.DEFAULT_TY
     elif action == "draft_cancel":
         try:
             await cancel_draft(draft_id)
+            await record_decision("email_draft", str(draft_id), "rejected")
             new_text = query.message.text + "\n\n❌ *Brouillon annulé.*"
             await query.edit_message_text(new_text, parse_mode="Markdown")
             logger.info(f"Draft {draft_id} annulé")
@@ -474,7 +481,10 @@ async def handle_event_callback(update: Update, context: ContextTypes.DEFAULT_TY
 
     event_data = json.loads(cached)
 
+    from src.memory.learning import record_decision
+
     if action == "event_cancel":
+        await record_decision("event", event_data.get("title", "?"), "rejected")
         await query.edit_message_text(
             query.message.text + "\n\n❌ *Annulé.*",
             parse_mode="Markdown",
@@ -506,6 +516,8 @@ async def handle_event_callback(update: Update, context: ContextTypes.DEFAULT_TY
         )
 
         date_str = start_dt.strftime("%A %d %B à %Hh%M")
+        await record_decision("event", event_data["title"], "approved",
+                              {"date": event_data.get("start_iso", "")})
         await query.edit_message_text(
             f"✅ *Événement créé !*\n\n"
             f"📅 *{event_data['title']}*\n"
@@ -760,6 +772,187 @@ async def handle_courses_callback(update: Update, context: ContextTypes.DEFAULT_
 
 
 # ─────────────────────────────────────────────────────────────
+# Sprint 4 — Intelligence produit (analyse conviction + roadmap)
+# ─────────────────────────────────────────────────────────────
+
+async def cmd_analyse(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Déclenche une analyse conviction pour une app ou toutes les apps.
+    Usage: /analyse           → rapport pour toutes les apps
+           /analyse job       → rapport pour Job Verdict uniquement
+    """
+    if not is_authorized(update.effective_user.id):
+        return
+
+    await update.message.reply_chat_action(ChatAction.TYPING)
+
+    from src.integrations.product_intelligence import (
+        generate_weekly_product_report,
+        send_weekly_product_report,
+    )
+    from src.config import settings
+
+    if not settings.github_configured:
+        await update.message.reply_text(
+            "GitHub non configuré.\n"
+            "Ajoutez GITHUB_TOKEN et GITHUB_REPOS sur Railway."
+        )
+        return
+
+    args = context.args or []
+    app_filter = " ".join(args).lower() if args else None
+
+    await update.message.reply_text(
+        "⏳ Analyse en cours via Claude… (peut prendre 30-60 secondes)",
+    )
+
+    try:
+        if app_filter:
+            # Rapport ciblé sur une app
+            from src.integrations.github import fetch_all_repos_full_context
+            from src.integrations.stripe_client import fetch_revenue
+            from src.integrations.product_intelligence import analyze_app_conviction, APP_EMOJIS
+            from src.memory.cache import set_cache
+            import json
+            from datetime import datetime, timezone
+
+            all_contexts = await fetch_all_repos_full_context()
+            # Trouver l'app matching le filtre
+            match = None
+            for ctx in all_contexts:
+                app_name = ctx.get("app_context", {}).get("name", "").lower()
+                repo_name = ctx["repo"].split("/")[-1].lower()
+                if app_filter in app_name or app_filter in repo_name:
+                    match = ctx
+                    break
+
+            if not match:
+                await update.message.reply_text(
+                    f"App '{app_filter}' introuvable. Apps disponibles : "
+                    + ", ".join(
+                        ctx.get("app_context", {}).get("name", ctx["repo"])
+                        for ctx in all_contexts
+                    )
+                )
+                return
+
+            app_context = match.get("app_context", {})
+            app_name = app_context.get("name", match["repo"])
+            emoji = APP_EMOJIS.get(app_name, "📱")
+
+            revenue_data = None
+            if settings.stripe_configured and app_context.get("monetized"):
+                try:
+                    revenue_data = await fetch_revenue()
+                except Exception:
+                    pass
+
+            report = await analyze_app_conviction(
+                app_context=app_context,
+                readme=match.get("readme", ""),
+                activity=match.get("activity", {}),
+                revenue_data=revenue_data,
+            )
+
+            # Stocker en cache pour validation roadmap
+            from src.memory.cache import set_cache
+            cache_key = f"roadmap_pending:{app_name.lower().replace(' ', '_')}"
+            await set_cache(cache_key, json.dumps({
+                "app_name": app_name,
+                "repo": match["repo"],
+                "report": report,
+                "generated_at": datetime.now(timezone.utc).isoformat(),
+            }), ttl=7 * 24 * 3600)
+
+            from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+            safe_key = app_name.lower().replace(" ", "_")
+            keyboard = InlineKeyboardMarkup([[
+                InlineKeyboardButton("✅ Valider roadmap", callback_data=f"roadmap_approve:{safe_key}"),
+                InlineKeyboardButton("❌ Rejeter", callback_data=f"roadmap_reject:{safe_key}"),
+            ]])
+
+            await update.message.reply_text(
+                f"{emoji} {report[:4000]}",
+                parse_mode="Markdown",
+                reply_markup=keyboard,
+            )
+
+        else:
+            # Rapport complet toutes les apps via send_weekly_product_report
+            await send_weekly_product_report()
+
+    except Exception as e:
+        logger.error(f"Erreur cmd_analyse : {e}", exc_info=True)
+        await update.message.reply_text(f"❌ Erreur analyse : {e}")
+
+
+async def handle_roadmap_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Gère la validation/rejet d'une roadmap produit."""
+    query = update.callback_query
+    await query.answer()
+
+    if not is_authorized(query.from_user.id):
+        return
+
+    data = query.data  # "roadmap_approve:job_verdict" | "roadmap_reject:job_verdict"
+    try:
+        action, app_key = data.split(":", 1)
+    except (ValueError, AttributeError):
+        logger.warning(f"Callback roadmap invalide : {data}")
+        return
+
+    from src.memory.learning import record_decision
+
+    if action == "roadmap_reject":
+        await record_decision("roadmap", app_key, "rejected")
+        await query.edit_message_text(
+            query.message.text + "\n\n❌ *Roadmap rejetée.*",
+            parse_mode="Markdown",
+        )
+        return
+
+    if action == "roadmap_approve":
+        from src.integrations.product_intelligence import approve_roadmap
+        try:
+            result = await approve_roadmap(app_key)
+            if not result:
+                await query.edit_message_text(
+                    query.message.text + "\n\n⚠️ *Cache expiré — relancez /analyse.*",
+                    parse_mode="Markdown",
+                )
+                return
+
+            app_name = result.get("app_name", app_key)
+            await record_decision("roadmap", app_key, "approved", {"app_name": app_name})
+            await query.edit_message_text(
+                query.message.text + f"\n\n✅ *Roadmap {app_name} validée et stockée.*",
+                parse_mode="Markdown",
+            )
+            logger.info(f"Roadmap approuvée via Telegram : {app_name}")
+        except Exception as e:
+            logger.error(f"Erreur approbation roadmap {app_key}: {e}")
+            await context.bot.send_message(
+                chat_id=query.message.chat_id,
+                text=f"❌ Erreur validation roadmap : {e}",
+            )
+
+
+# ─────────────────────────────────────────────────────────────
+# Mémoire apprenante — /memoire
+# ─────────────────────────────────────────────────────────────
+
+async def cmd_memoire(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Affiche ce que Jarvis a appris sur Nassim et ses interactions."""
+    if not is_authorized(update.effective_user.id):
+        return
+
+    await update.message.reply_chat_action(ChatAction.TYPING)
+    from src.memory.learning import get_full_learning_report
+    report = await get_full_learning_report()
+    await update.message.reply_text(report, parse_mode="Markdown")
+
+
+# ─────────────────────────────────────────────────────────────
 # Sprint 4 — GitHub + Stripe
 # ─────────────────────────────────────────────────────────────
 
@@ -825,14 +1018,25 @@ async def handle_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE
     from src.llm.groq_client import groq_client
     from src.memory.cache import get_conversation_history, save_conversation_history
     from src.memory.database import log_message
+    from src.memory.learning import record_active_moment
+    from src.context import build_enriched_system_prompt
 
     user_id = str(update.effective_user.id)
     user_text = update.message.text
 
+    # Tracker l'activité + construire le prompt enrichi en parallèle
+    system_prompt, _ = await asyncio.gather(
+        build_enriched_system_prompt(),
+        record_active_moment(),
+        return_exceptions=True,
+    )
+    if isinstance(system_prompt, Exception):
+        system_prompt = None
+
     history = await get_conversation_history(user_id)
     history.append({"role": "user", "content": user_text})
 
-    response = await groq_client.chat(history)
+    response = await groq_client.chat(history, system_override=system_prompt or None)
 
     history.append({"role": "assistant", "content": response})
     await save_conversation_history(user_id, history)
@@ -853,6 +1057,8 @@ async def handle_voice_message(update: Update, context: ContextTypes.DEFAULT_TYP
     from src.audio.stt import transcribe_audio
     from src.memory.cache import get_conversation_history, save_conversation_history
     from src.memory.database import log_message
+    from src.memory.learning import record_active_moment
+    from src.context import build_enriched_system_prompt
 
     user_id = str(update.effective_user.id)
     voice = update.message.voice or update.message.audio
@@ -871,10 +1077,19 @@ async def handle_voice_message(update: Update, context: ContextTypes.DEFAULT_TYP
             )
             return
 
+        # Tracker l'activité + construire le prompt enrichi en parallèle
+        system_prompt, _ = await asyncio.gather(
+            build_enriched_system_prompt(),
+            record_active_moment(),
+            return_exceptions=True,
+        )
+        if isinstance(system_prompt, Exception):
+            system_prompt = None
+
         history = await get_conversation_history(user_id)
         history.append({"role": "user", "content": transcription})
 
-        response = await groq_client.chat(history)
+        response = await groq_client.chat(history, system_override=system_prompt or None)
 
         history.append({"role": "assistant", "content": response})
         await save_conversation_history(user_id, history)
