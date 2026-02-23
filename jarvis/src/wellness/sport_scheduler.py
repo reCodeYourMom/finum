@@ -126,7 +126,7 @@ async def propose_weekly_sport_plan() -> None:
         "content": f"""Propose un planning sport pour la semaine prochaine (du lundi au samedi).
 
 Profil Nassim : recomposition corporelle (116 kg, 170 cm), musculation + boxe, 6 séances/semaine.
-Horaires préférés : 7h00-9h00 ou 18h00-20h00, lundi au samedi.
+Horaires préférés (par ordre de priorité) : 7h00-9h00, 12h00-14h00, 18h00-20h00, lundi au samedi.
 Lundi prochain : {next_monday.strftime('%Y-%m-%d')}
 Créneaux occupés :\n{busy_str}
 
